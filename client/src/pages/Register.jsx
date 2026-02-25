@@ -27,6 +27,8 @@ export default function Register() {
     try {
       setSubmitting(true);
       await register(form);
+
+      navigate("/login");
     } catch (err) {
         console.log(err)
       alert("Registration failed");
