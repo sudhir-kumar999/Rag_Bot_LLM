@@ -1,78 +1,40 @@
 import { Link, useNavigate } from "react-router-dom";
-// import { useAuth } from "../context/AuthContext";
+import { useAuth } from "../context/AuthContext";
+import { useEffect } from "react";
 
 export default function Home() {
+  const { user, loading } = useAuth();
+  const navigate = useNavigate();
 
-//   const { user, logout } = useAuth();
-//   const navigate = useNavigate();
+  // ✅ Redirect logged-in user to dashboard
+  useEffect(() => {
+    if (!loading && user) {
+      navigate("/dashboard");
+    }
+  }, [user, loading, navigate]);
 
-//   const handleLogout = async () => {
-//     await logout();
-//     navigate("/");
-//   };
+  // ✅ Prevent UI flicker while checking auth
+  if (loading) {
+    return (
+      <div className="h-screen flex items-center justify-center text-xl font-semibold">
+        Loading...
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-indigo-600 via-purple-600 to-blue-600 text-white">
 
-      {/* NAVBAR */}
-      {/* <nav className="flex justify-between items-center px-10 py-6">
-        <h1 className="text-2xl font-bold tracking-wide">
-          NotebookLLM
-        </h1>
-
-        <div className="space-x-4">
-
-          {user ? (
-            <>
-              <span className="font-semibold">
-                👋 {user.name}
-              </span>
-
-              <Link
-                to="/dashboard"
-                className="px-5 py-2 rounded-lg bg-white text-indigo-600 font-semibold hover:bg-gray-200 transition"
-              >
-                Dashboard
-              </Link>
-
-              <button
-                onClick={handleLogout}
-                className="px-5 py-2 rounded-lg border border-white hover:bg-white hover:text-indigo-600 transition"
-              >
-                Logout
-              </button>
-            </>
-          ) : (
-            <>
-              <Link
-                to="/login"
-                className="px-5 py-2 rounded-lg bg-white text-indigo-600 font-semibold hover:bg-gray-200 transition"
-              >
-                Login
-              </Link>
-
-              <Link
-                to="/register"
-                className="px-5 py-2 rounded-lg border border-white hover:bg-white hover:text-indigo-600 transition"
-              >
-                Sign Up
-              </Link>
-            </>
-          )}
-
-        </div>
-      </nav> */}
-
       {/* HERO SECTION */}
-      <div className="flex flex-col items-center justify-center text-center px-6 ">
+      <div className="flex flex-col items-center justify-center text-center px-6 pt-32">
 
         <h2 className="text-5xl font-extrabold leading-tight max-w-3xl">
           Chat With Your Documents Using AI
         </h2>
 
         <p className="mt-6 text-lg text-gray-200 max-w-xl">
-          Upload PDFs, create notebooks, and ask questions
-          powered by Gemini AI and RAG architecture.
+          Upload PDFs, create notebooks, and ask questions powered
+          by Gemini AI and RAG architecture.
         </p>
 
         <div className="mt-10 flex gap-6">
@@ -115,6 +77,7 @@ export default function Home() {
   );
 }
 
+// ✅ Feature Card Component
 function Feature({ title, desc }) {
   return (
     <div className="bg-white/10 backdrop-blur-lg p-6 rounded-2xl shadow-lg hover:scale-105 transition">
