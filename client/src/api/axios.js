@@ -1,7 +1,8 @@
 import axios from "axios";
 
 const API = axios.create({
-  baseURL: "http://localhost:5000/api",
+  // baseURL: "http://localhost:5000/api"
+  baseURL:"https://rag-bot-llm.onrender.com",
   withCredentials: true, // ✅ cookie send karega
 });
 
