@@ -1,9 +1,4 @@
-import {
-  createContext,
-  useContext,
-  useState,
-  useEffect,
-} from "react";
+import { createContext, useContext, useState, useEffect } from "react";
 import API from "../api/axios";
 
 const AuthContext = createContext();
@@ -18,7 +13,7 @@ export const AuthProvider = ({ children }) => {
       const res = await API.get("/auth/me");
       setUser(res.data);
     } catch (error) {
-        console.log(error)
+      console.log(error);
       setUser(null);
     } finally {
       setLoading(false);
@@ -44,14 +39,14 @@ export const AuthProvider = ({ children }) => {
 
   // ✅ LOGOUT
   const logout = async () => {
-  try {
-    await API.post("/auth/logout");
-  } catch (error) {
-    console.log("Logout error:", error);
-  } finally {
-    setUser(null); // UI always reset
-  }
-};
+    try {
+      await API.post("/auth/logout");
+    } catch (error) {
+      console.log("Logout error:", error);
+    } finally {
+      setUser(null); // UI always reset
+    }
+  };
 
   return (
     <AuthContext.Provider
