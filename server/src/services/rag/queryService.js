@@ -91,6 +91,14 @@ ANSWER
     context,
     question,
   });
+  // ✅ confidence score (0–100)
+const confidence =
+  searchResult.matches?.length > 0
+    ? Math.round(searchResult.matches[0].score * 100)
+    : 0;
 
-  return answer;
+  return {
+  answer,
+  confidence,
+};
 };

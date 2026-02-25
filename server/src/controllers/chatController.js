@@ -11,11 +11,17 @@ export const chatWithDocs = async (req, res) => {
       });
     }
 
-    const answer = await askQuestion(question, userId);
+    // const answer = await askQuestion(question, userId);
+    const result = await askQuestion(question, userId);
 
+res.json({
+  answer: result.answer,
+  confidence: result.confidence,
+});
     res.json({
-      answer,
-    });
+  answer: result.answer,
+  confidence: result.confidence,
+});
 
   } catch (error) {
     console.error(error);

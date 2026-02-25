@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import API from "../../api/axios";
+import ReactMarkdown from "react-markdown";
 
 export default function ChatPanel() {
   const [question, setQuestion] = useState("");
@@ -29,7 +30,11 @@ export default function ChatPanel() {
 
       setMessages((prev) => [
         ...prev,
-        { role: "ai", text: res.data.answer },
+        {
+          role: "ai",
+          text: res.data.answer,
+          confidence: res.data.confidence,
+        },
       ]);
     } catch (err) {
       setMessages((prev) => [
@@ -44,10 +49,8 @@ export default function ChatPanel() {
   return (
     // ✅ FULL HEIGHT CONTAINER
     <div className="h-full flex flex-col bg-gray-50 overflow-hidden">
-
       {/* CHAT AREA */}
       <div className="flex-1 overflow-y-auto px-4 sm:px-6 md:px-10 py-6 space-y-6">
-
         {messages.length === 0 && (
           <div className="text-center text-gray-400 mt-20 px-4">
             Ask questions about your uploaded document 📄
@@ -58,9 +61,7 @@ export default function ChatPanel() {
           <div
             key={index}
             className={`flex ${
-              msg.role === "user"
-                ? "justify-end"
-                : "justify-start"
+              msg.role === "user" ? "justify-end" : "justify-start"
             }`}
           >
             <div
@@ -71,8 +72,33 @@ export default function ChatPanel() {
               }`}
             >
               <p className="whitespace-pre-wrap text-sm md:text-base">
-                {msg.text}
+                <ReactMarkdown>{msg.text}</ReactMarkdown>
               </p>
+
+              {/* ✅ Confidence Indicator */}
+              {msg.role === "ai" && msg.confidence !== undefined && (
+                <div className="mt-2 text-xs text-gray-500">
+                  Confidence:{" "}
+                  <span
+                    className={`font-semibold ${
+                      msg.confidence > 80
+                        ? "text-green-600"
+                        : msg.confidence > 60
+                        ? "text-yellow-600"
+                        : "text-red-600"
+                    }`}
+                  >
+                    {msg.confidence}%
+                  </span>
+                  {/* progress bar */}
+                  <div className="w-full bg-gray-200 h-1.5 rounded mt-1">
+                    <div
+                      className="h-1.5 rounded bg-indigo-500"
+                      style={{ width: `${msg.confidence}%` }}
+                    />
+                  </div>
+                </div>
+              )}
             </div>
           </div>
         ))}
@@ -92,13 +118,10 @@ export default function ChatPanel() {
       {/* INPUT AREA (STICKY BOTTOM) */}
       <div className="border-t bg-white p-3 sm:p-4">
         <div className="flex gap-2 sm:gap-3 max-w-4xl mx-auto">
-
           <input
             value={question}
             onChange={(e) => setQuestion(e.target.value)}
-            onKeyDown={(e) =>
-              e.key === "Enter" && askQuestion()
-            }
+            onKeyDown={(e) => e.key === "Enter" && askQuestion()}
             placeholder="Ask anything about your document..."
             className="flex-1 border rounded-full px-4 sm:px-5 py-2 sm:py-3 text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-indigo-500"
           />
@@ -110,7 +133,6 @@ export default function ChatPanel() {
           >
             Ask
           </button>
-
         </div>
       </div>
     </div>
