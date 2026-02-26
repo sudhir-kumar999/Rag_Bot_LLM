@@ -12,6 +12,7 @@ app.use(
     origin: [
       "http://localhost:5173",
       "https://rag-bot-front.onrender.com",
+      "https://omniagent-ai-front.onrender.com"
     ],
     credentials: true,
   })
